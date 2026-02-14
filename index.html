@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Django Master Notes - Complete Backend Development Guide</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Django learning with Ravi Ranjan Kashyap</title>
+
+    <!-- Fonts: Crimson Pro for editorial feel, Fira Code for code, Work Sans for UI -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700;900&family=Fira+Code:wght@400;500;600&family=Work+Sans:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
@@ -19,26 +22,39 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Work Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        serif: ['Crimson Pro', 'serif'],
                     },
                     colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            300: '#86efac',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d',
+                        ink: {
+                            50: '#f8f9fa',
+                            100: '#e9ecef',
+                            200: '#dee2e6',
+                            300: '#adb5bd',
+                            400: '#6c757d',
+                            500: '#495057',
+                            600: '#343a40',
+                            700: '#212529',
+                            800: '#1a1d21',
+                            900: '#121416',
+                            950: '#0a0b0c',
                         },
-                        slate: {
-                            850: '#1a202e',
-                            950: '#0f1419',
+                        django: {
+                            green: '#0c4b33',
+                            emerald: '#44b78b',
+                            mint: '#5dd39e',
+                            forest: '#092f20',
+                        },
+                        accent: {
+                            amber: '#f59e0b',
+                            sky: '#0ea5e9',
+                            rose: '#fb7185',
+                            violet: '#8b5cf6',
                         }
+                    },
+                    backgroundImage: {
+                        'paper-grain': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E\")",
                     }
                 }
             }
@@ -46,51 +62,249 @@
     </script>
 
     <style>
-        * {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        /* Paper texture */
+        .paper-texture {
+            position: relative;
+            background-color: #0a0b0c;
         }
 
-        /* Custom Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        .paper-texture::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 3px;
+        ::-webkit-scrollbar-track {
+            background: #121416;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+        ::-webkit-scrollbar-thumb {
+            background: #0c4b33;
+            border-radius: 5px;
+            border: 2px solid #121416;
         }
 
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #44b78b;
         }
 
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        /* Folder tree styles */
+        .folder-tree {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.8;
         }
 
-        .card-hover {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .folder-item {
+            position: relative;
+            padding: 6px 12px 6px 28px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border-radius: 4px;
+            border-left: 2px solid transparent;
         }
 
-        .card-hover:hover {
-            transform: translateY(-2px);
+        .folder-item:hover {
+            background: rgba(68, 183, 139, 0.08);
+            border-left-color: #44b78b;
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out;
+        .folder-item.active {
+            background: rgba(68, 183, 139, 0.12);
+            border-left-color: #44b78b;
+            color: #5dd39e;
+            font-weight: 500;
         }
 
+        .folder-icon {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .folder-expand {
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .folder-expand.expanded {
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        .folder-children {
+            margin-left: 20px;
+            border-left: 1px solid rgba(68, 183, 139, 0.15);
+            padding-left: 8px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .folder-children.expanded {
+            max-height: 2000px;
+        }
+
+        /* Article card styles */
+        .article-card {
+            position: relative;
+            background: linear-gradient(135deg, #1a1d21 0%, #121416 100%);
+            border: 1px solid rgba(68, 183, 139, 0.15);
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0c4b33, #44b78b, #5dd39e);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(68, 183, 139, 0.4);
+            box-shadow: 0 12px 40px -10px rgba(68, 183, 139, 0.2);
+        }
+
+        .article-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Badge styles */
+        .difficulty-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .difficulty-beginner {
+            background: rgba(68, 183, 139, 0.15);
+            color: #5dd39e;
+            border: 1px solid rgba(93, 211, 158, 0.3);
+        }
+
+        .difficulty-intermediate {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .difficulty-advanced {
+            background: rgba(251, 113, 133, 0.15);
+            color: #fb7185;
+            border: 1px solid rgba(251, 113, 133, 0.3);
+        }
+
+        /* Loading animation */
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .loading-pulse {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* Selection */
+        ::selection {
+            background: #44b78b;
+            color: #0a0b0c;
+        }
+
+        /* GitHub link styling */
+        .github-link {
+            position: relative;
+            color: #6c757d;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 13px;
+        }
+
+        .github-link:hover {
+            color: #44b78b;
+        }
+
+        .github-link::after {
+            content: '↗';
+            margin-left: 4px;
+            font-size: 10px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .github-link:hover::after {
+            opacity: 1;
+        }
+
+        /* Progress ring */
+        .progress-ring {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        /* Breadcrumb trail */
+        .breadcrumb-trail {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .breadcrumb-trail .path-sep {
+            margin: 0 6px;
+            opacity: 0.4;
+        }
+
+        .breadcrumb-trail .path-active {
+            color: #5dd39e;
+            font-weight: 500;
+        }
+
+        /* Search highlight */
+        .search-highlight {
+            background: rgba(245, 158, 11, 0.2);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        /* Fade in animation */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -102,199 +316,923 @@
                 transform: translateY(0);
             }
         }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .stagger-1 {
+            animation-delay: 0.05s;
+            opacity: 0;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.15s;
+            opacity: 0;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.25s;
+            opacity: 0;
+        }
+
+        .stagger-6 {
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
     </style>
 </head>
 
-<body class="text-gray-200 bg-[#0f1419] h-screen overflow-hidden flex flex-col">
+<body class="bg-ink-950 text-ink-100 font-sans antialiased overflow-hidden h-screen paper-texture">
 
-    <!-- Navbar -->
-    <nav class="shrink-0 h-16 bg-[#0f1419]/90 backdrop-blur-md border-b border-slate-800 z-50">
-        <div class="h-full max-w-[1600px] mx-auto px-4 lg:px-6 flex items-center justify-between">
-            <!-- Logo -->
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-900/20">
-                    <i data-lucide="zap" class="w-4 h-4 text-white"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-gray-100 leading-none">DjangoMaster</h1>
-                    <span class="text-[10px] text-green-500 font-medium tracking-wide">BACKEND ROADMAP</span>
-                </div>
-            </div>
+    <!-- Header -->
+    <header class="relative z-50 h-16 border-b border-ink-800/50 backdrop-blur-xl bg-ink-950/80">
+        <div class="h-full max-w-[1800px] mx-auto px-6 flex items-center justify-between">
 
-            <!-- Global Search & Stats -->
-            <div class="flex items-center gap-4 lg:gap-6">
-                <!-- Search -->
-                <div class="relative hidden sm:block w-64 lg:w-96 group">
-                    <i data-lucide="search"
-                        class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-green-500 transition-colors"></i>
-                    <input type="text" onkeyup="handleSearch(this.value)" id="global-search"
-                        placeholder="Search topics (Ctrl+K)..."
-                        class="w-full bg-slate-900/50 border border-slate-800 text-sm rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-green-500/50 focus:ring-1 focus:ring-green-500/50 transition-all text-gray-300 placeholder-gray-600">
-                </div>
-
-                <!-- Progress Pill -->
-                <div
-                    class="hidden md:flex items-center gap-3 bg-slate-900/50 border border-slate-800 rounded-full px-4 py-1.5">
-                    <div class="flex flex-col items-end">
-                        <span class="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Progress</span>
-                    </div>
-                    <div class="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                        <div id="nav-progress-bar"
-                            class="h-full bg-gradient-to-r from-green-500 to-emerald-400 w-0 transition-all duration-700">
-                        </div>
-                    </div>
-                    <span class="text-xs font-bold text-green-400" id="nav-progress-text">0%</span>
-                </div>
-
-                <!-- GitHub Link -->
-                <a href="https://github.com/Raviranjan010/Python_Complete_notes" target="_blank"
-                    class="p-2 text-gray-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-                    title="View on GitHub">
-                    <i data-lucide="github" class="w-5 h-5"></i>
-                </a>
-
-                <!-- Mobile Menu Button -->
-                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-gray-400 hover:text-white rounded-lg">
+            <!-- Logo & Title -->
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 hover:bg-ink-800/50 rounded transition-colors">
                     <i data-lucide="menu" class="w-5 h-5"></i>
                 </button>
+
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="resetView()">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-django-green to-django-emerald rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-django-emerald/30 transition-all">
+                        <span class="font-serif font-black text-white text-xl">Dj</span>
+                    </div>
+                    <div>
+                        <h1 class="font-serif font-bold text-lg leading-none text-ink-50">Django by RRK</h1>
+                        <p class="text-[10px] font-mono text-django-mint tracking-wider">Learning Repository</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-xl mx-8">
+                <div class="relative w-full group">
+                    <i data-lucide="search"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500 group-focus-within:text-django-mint transition-colors"></i>
+                    <input type="text" id="search-input" placeholder="Search modules, topics, or files..."
+                        class="w-full pl-10 pr-4 py-2.5 bg-ink-900/50 border border-ink-700 text-ink-200 placeholder-ink-600 rounded-lg focus:outline-none focus:border-django-emerald focus:ring-2 focus:ring-django-emerald/20 font-mono text-sm transition-all"
+                        onkeyup="handleSearch(this.value)">
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-4">
+                <!-- Progress Circle -->
+                <div class="hidden md:flex items-center gap-3">
+                    <div class="relative w-10 h-10">
+                        <svg class="w-10 h-10 transform -rotate-90">
+                            <circle cx="20" cy="20" r="16" stroke="currentColor" stroke-width="3" fill="none"
+                                class="text-ink-800" />
+                            <circle cx="20" cy="20" r="16" stroke="currentColor" stroke-width="3" fill="none"
+                                class="text-django-emerald progress-ring"
+                                style="stroke-dasharray: 100; stroke-dashoffset: 100;" id="progress-circle" />
+                        </svg>
+                        <span
+                            class="absolute inset-0 flex items-center justify-center text-[10px] font-mono font-bold text-django-mint"
+                            id="progress-text">0%</span>
+                    </div>
+                    <div class="text-xs">
+                        <div class="text-ink-400 font-mono">Progress</div>
+                        <div class="text-django-mint font-mono font-semibold" id="progress-count">0/0</div>
+                    </div>
+                </div>
+
+                <div class="w-px h-8 bg-ink-800 hidden lg:block"></div>
+
+                <!-- GitHub Button -->
+                <a href="https://github.com/Raviranjan010/Django_Learning" target="_blank"
+                    class="flex items-center gap-2 px-4 py-2 bg-ink-900 border border-ink-700 hover:border-django-emerald hover:bg-ink-800 rounded-lg transition-all group">
+                    <i data-lucide="github" class="w-4 h-4 text-ink-400 group-hover:text-django-mint"></i>
+                    <span
+                        class="hidden xl:block text-sm font-medium text-ink-300 group-hover:text-ink-100">Repository</span>
+                </a>
+
+                <!-- Profile -->
+                <a href="https://github.com/Raviranjan010" target="_blank" class="relative group">
+                    <div
+                        class="w-9 h-9 rounded-full border-2 border-django-emerald/30 group-hover:border-django-emerald overflow-hidden transition-all shadow-md group-hover:shadow-django-emerald/30">
+                        <img src="https://github.com/Raviranjan010.png" alt="Ravi Ranjan"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all">
+                    </div>
+                    <div
+                        class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-django-mint rounded-full border-2 border-ink-950">
+                    </div>
+                </a>
             </div>
         </div>
-    </nav>
+    </header>
 
     <!-- Main Layout -->
-    <div class="flex-1 flex overflow-hidden max-w-[1600px] mx-auto w-full">
+    <div class="flex h-[calc(100vh-64px)]">
 
-        <!-- Sidebar (Phases) -->
-        <aside class="w-72 hidden lg:flex flex-col border-r border-slate-800 bg-[#0f1419]" id="sidebar">
-            <div class="p-4 border-b border-slate-800">
-                <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 px-2">Learning Path</h2>
-                <div class="space-y-1 overflow-y-auto custom-scrollbar pr-1 max-h-[calc(100vh-12rem)]" id="phases-list">
-                    <!-- Phases injected by JS -->
+        <!-- Sidebar - File Tree -->
+        <aside id="sidebar"
+            class="w-80 bg-ink-900/50 border-r border-ink-800/50 flex flex-col absolute lg:static h-full transition-transform duration-300 -translate-x-full lg:translate-x-0 z-40 backdrop-blur-xl">
+
+            <!-- Sidebar Header -->
+            <div class="p-5 border-b border-ink-800/50">
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="folder-tree" class="w-4 h-4 text-django-emerald"></i>
+                    <span class="text-xs font-mono uppercase tracking-widest text-ink-400">Repository Structure</span>
                 </div>
+
+                <!-- Filter -->
+                <div class="relative">
+                    <i data-lucide="filter"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ink-600"></i>
+                    <input type="text" id="tree-filter" placeholder="Filter folders..."
+                        class="w-full bg-ink-950 border border-ink-800 rounded py-2 pl-9 pr-3 text-xs text-ink-200 focus:outline-none focus:border-django-emerald font-mono transition-colors"
+                        onkeyup="filterTree(this.value)">
+                </div>
+            </div>
+
+            <!-- File Tree -->
+            <div id="file-tree" class="flex-1 overflow-y-auto p-4 folder-tree">
+                <!-- Injected via JS -->
             </div>
 
             <!-- Sidebar Footer -->
-            <div class="mt-auto p-4 border-t border-slate-800 bg-slate-900/30">
-                <div class="flex items-center gap-3 px-2">
+            <div class="p-4 border-t border-ink-800/50">
+                <div class="flex items-center gap-3 p-3 bg-ink-950/50 border border-ink-800 rounded-lg">
                     <div
-                        class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
-                        <span class="text-xs font-bold text-gray-400">DM</span>
+                        class="w-8 h-8 bg-django-emerald/10 border border-django-emerald/30 rounded flex items-center justify-center">
+                        <i data-lucide="book-open" class="w-4 h-4 text-django-emerald"></i>
                     </div>
-                    <div class="overflow-hidden">
-                        <p class="text-sm font-medium text-gray-300 truncate">Django Master</p>
-                        <p class="text-xs text-gray-500 truncate">v2.0 • Updated 2026</p>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-semibold text-ink-200 truncate">Django Learning Path</p>
+                        <p class="text-[10px] text-ink-500 font-mono">2026 Edition</p>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 flex flex-col bg-[#0f1419] relative overflow-hidden">
+        <!-- Overlay for mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden lg:hidden"
+            onclick="toggleSidebar()"></div>
 
-            <!-- Mobile Phase Selector -->
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+            <!-- Content Header -->
             <div
-                class="lg:hidden shrink-0 border-b border-slate-800 bg-[#0f1419]/95 backdrop-blur z-20 overflow-x-auto hide-scrollbar">
-                <div class="flex p-2 gap-2" id="mobile-phases-list">
-                    <!-- Mobile pills injected by JS -->
+                class="h-14 border-b border-ink-800/50 flex items-center justify-between px-8 bg-ink-900/30 backdrop-blur-sm shrink-0">
+                <div class="breadcrumb-trail">
+                    <span class="text-ink-500">~</span>
+                    <span class="path-sep">/</span>
+                    <span class="text-django-mint">Django_Learning</span>
+                    <span class="path-sep">/</span>
+                    <span id="breadcrumb-path" class="path-active">select module</span>
+                </div>
+
+                <!-- View Controls -->
+                <div class="flex items-center gap-2">
+                    <button onclick="setView('grid')" id="view-grid"
+                        class="p-2 text-ink-400 hover:text-django-mint transition-colors rounded" title="Grid View">
+                        <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="setView('list')" id="view-list"
+                        class="p-2 text-ink-400 hover:text-django-mint transition-colors rounded" title="List View">
+                        <i data-lucide="list" class="w-4 h-4"></i>
+                    </button>
                 </div>
             </div>
 
             <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-10 scroll-smooth" id="main-scroll">
-                <div class="max-w-5xl mx-auto pb-20">
+            <div id="main-content" class="flex-1 overflow-y-auto p-8 scroll-smooth">
+                <div class="max-w-[1400px] mx-auto">
 
-                    <!-- Breadcrumbs & Actions -->
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                        <div class="flex items-center gap-2 text-sm text-gray-500">
-                            <span>Roadmap</span>
-                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                            <span class="text-green-400 font-medium" id="active-phase-breadcrumb">Loading...</span>
-                        </div>
-
-                        <!-- Difficulty Filter in Content Area -->
-                        <div class="flex bg-slate-900 rounded-lg p-1 border border-slate-800 self-start md:self-auto">
-                            <button onclick="setDifficulty('all')"
-                                class="difficulty-btn active px-3 py-1 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-white"
-                                data-diff="all">All</button>
-                            <button onclick="setDifficulty('beginner')"
-                                class="difficulty-btn px-3 py-1 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-white"
-                                data-diff="beginner">Beginner</button>
-                            <button onclick="setDifficulty('intermediate')"
-                                class="difficulty-btn px-3 py-1 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-white"
-                                data-diff="intermediate">Inter</button>
-                            <button onclick="setDifficulty('advanced')"
-                                class="difficulty-btn px-3 py-1 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-white"
-                                data-diff="advanced">Adv</button>
-                        </div>
-                    </div>
-
-                    <!-- Phase Header -->
-                    <div class="mb-10 animate-fade-in">
-                        <div class="flex items-start gap-5">
-                            <div class="w-16 h-16 rounded-2xl bg-slate-800 border-2 border-slate-700 flex items-center justify-center shrink-0 shadow-2xl"
-                                id="phase-icon-container">
-                                <i data-lucide="folder" class="w-8 h-8 text-gray-400"></i>
+                    <!-- Module Header -->
+                    <div id="module-header" class="mb-12">
+                        <div class="flex items-start gap-6">
+                            <div id="module-icon"
+                                class="shrink-0 w-16 h-16 bg-gradient-to-br from-django-green to-django-emerald rounded-xl flex items-center justify-center shadow-lg">
+                                <i data-lucide="folder-open" class="w-8 h-8 text-white"></i>
                             </div>
-                            <div>
-                                <h2 class="text-3xl font-bold text-white mb-2" id="phase-title">Select a Phase</h2>
-                                <p class="text-gray-400 text-lg leading-relaxed max-w-2xl" id="phase-description">Select
-                                    a phase from the sidebar to begin.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Topics Grid -->
-                    <div id="topics-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                        <!-- Content Injected -->
-                    </div>
-
-                    <!-- Navigation Footer -->
-                    <div class="mt-16 pt-8 border-t border-slate-800 flex justify-between items-center" id="phase-nav">
-                        <button onclick="prevPhase()" id="prev-btn"
-                            class="group flex items-center gap-3 px-5 py-3 rounded-xl border border-slate-700 hover:border-slate-500 hover:bg-slate-800/50 transition-all disabled:opacity-0 disabled:pointer-events-none">
-                            <i data-lucide="arrow-left"
-                                class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors"></i>
-                            <div class="text-left hidden sm:block">
-                                <div class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Previous
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span
+                                        class="px-3 py-1 bg-ink-900 border border-ink-700 text-[11px] font-mono text-ink-400 rounded uppercase tracking-wide">Module</span>
+                                    <span id="module-number" class="text-xs font-mono text-django-emerald">--</span>
                                 </div>
-                                <div class="text-sm font-medium text-gray-300 group-hover:text-white">Back</div>
+                                <h1 id="module-title" class="font-serif text-4xl font-black text-ink-50 mb-3">
+                                    Select a Module
+                                </h1>
+                                <p id="module-description" class="text-ink-400 text-lg leading-relaxed max-w-3xl">
+                                    Choose a learning module from the sidebar to explore Django concepts, or browse all
+                                    topics below.
+                                </p>
+                                <a id="module-github-link" href="#" target="_blank"
+                                    class="github-link inline-flex items-center gap-2 mt-4">
+                                    <i data-lucide="github" class="w-4 h-4"></i>
+                                    <span>View on GitHub</span>
+                                </a>
                             </div>
-                        </button>
-
-                        <button onclick="nextPhase()" id="next-btn"
-                            class="group flex items-center gap-3 px-5 py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 transition-all disabled:opacity-0 disabled:pointer-events-none">
-                            <div class="text-right hidden sm:block">
-                                <div class="text-[10px] text-green-200 uppercase tracking-wider font-bold">Next Phase
-                                </div>
-                                <div class="text-sm font-bold">Continue Learning</div>
-                            </div>
-                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                        </button>
+                        </div>
                     </div>
 
-                    <!-- Footer -->
-                    <footer class="mt-20 text-center text-sm text-gray-600">
-                        <p>Use <kbd
-                                class="bg-slate-800 px-1.5 py-0.5 rounded text-gray-400 font-mono text-xs border border-slate-700">Ctrl
-                                + K</kbd> to search</p>
-                    </footer>
+                    <!-- Content Grid -->
+                    <div id="content-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Cards injected via JS -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
+                        <div
+                            class="w-20 h-20 bg-ink-900 border border-ink-800 rounded-full flex items-center justify-center mb-4">
+                            <i data-lucide="folder-x" class="w-10 h-10 text-ink-600"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-ink-300 mb-2">No files found</h3>
+                        <p class="text-ink-500 font-mono text-sm">Try selecting a different module or adjusting your
+                            search</p>
+                    </div>
+
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Toast -->
-    <div id="toast"
-        class="fixed bottom-6 right-6 translate-y-24 opacity-0 transition-all duration-300 z-[60] bg-slate-800 border border-slate-700 text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3">
-        <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
-        <span id="toast-message" class="font-medium">Notification</span>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 translate-y-32 transition-all duration-500 z-50 opacity-0">
+        <div
+            class="bg-ink-900 border-2 border-django-emerald text-ink-100 px-6 py-4 rounded-lg shadow-2xl flex items-center gap-4 min-w-[300px]">
+            <div
+                class="w-10 h-10 bg-django-emerald/20 border border-django-emerald/40 rounded-full flex items-center justify-center">
+                <i data-lucide="check" class="w-5 h-5 text-django-mint"></i>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold text-ink-50">Success</h4>
+                <p id="toast-message" class="text-xs text-ink-400 font-mono">Action completed</p>
+            </div>
+        </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="roadmap-data.js"></script>
-    <script src="main.js"></script>
-    <script>lucide.createIcons();</script>
+    <script>
+        // Repository Structure Data
+        const repoStructure = [
+            {
+                id: 'prerequisites',
+                folder: '00_Prerequisites',
+                title: 'Prerequisites',
+                description: 'Foundation knowledge needed before starting Django',
+                icon: 'graduation-cap',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/00_Prerequisites',
+                files: [
+                    { name: '01_Web_Development_Basics.md', difficulty: 'beginner', topics: ['HTML', 'CSS', 'JavaScript', 'HTTP'] },
+                    { name: '02_Web_Development_Tools.md', difficulty: 'beginner', topics: ['Git', 'VS Code', 'Browser DevTools'] },
+                    { name: '03_Linux_Commands.md', difficulty: 'beginner', topics: ['Terminal', 'File System', 'Permissions'] }
+                ]
+            },
+            {
+                id: 'roadmap',
+                folder: '00_Roadmap',
+                title: 'Learning Roadmap',
+                description: 'Your structured path to Django mastery',
+                icon: 'map',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/00_Roadmap',
+                files: [
+                    { name: 'Roadmap.md', difficulty: 'beginner', topics: ['Planning', 'Strategy', 'Timeline'] }
+                ]
+            },
+            {
+                id: 'introduction',
+                folder: '01_Introduction',
+                title: 'Introduction to Django',
+                description: 'Getting started with Django framework',
+                icon: 'rocket',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/01_Introduction',
+                files: [
+                    { name: '01_What_Is_Django.md', difficulty: 'beginner', topics: ['MVT Pattern', 'Framework Overview'] },
+                    { name: '02_Installation_and_Setup.md', difficulty: 'beginner', topics: ['Virtual Environment', 'pip', 'Django Install'] }
+                ]
+            },
+            {
+                id: 'project-structure',
+                folder: '02_Project_Structure',
+                title: 'Project Structure',
+                description: 'Understanding Django project architecture',
+                icon: 'folder-tree',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/02_Project_Structure',
+                files: [
+                    { name: '01_Structure_Explained.md', difficulty: 'beginner', topics: ['manage.py', 'settings.py', 'urls.py', 'wsgi.py'] }
+                ]
+            },
+            {
+                id: 'apps',
+                folder: '03_Apps',
+                title: 'Django Applications',
+                description: 'Building modular Django apps',
+                icon: 'package',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/03_Apps',
+                files: [
+                    { name: '01_Django_Apps.md', difficulty: 'beginner', topics: ['App Creation', 'App Structure', 'App Configuration'] }
+                ]
+            },
+            {
+                id: 'models',
+                folder: '04_Models',
+                title: 'Models & Database',
+                description: 'Django ORM and database management',
+                icon: 'database',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/04_Models',
+                files: [
+                    { name: '01_Models_Basics.md', difficulty: 'beginner', topics: ['Models', 'Fields', 'Migrations'] },
+                    { name: '02_Connecting_Databases.md', difficulty: 'intermediate', topics: ['PostgreSQL', 'MySQL', 'SQLite'] },
+                    { name: '03_Relationships.md', difficulty: 'intermediate', topics: ['OneToOne', 'ForeignKey', 'ManyToMany'] },
+                    { name: '04_Meta_Class.md', difficulty: 'intermediate', topics: ['Meta Options', 'Ordering', 'Verbose Name'] },
+                    { name: '05_Model_Methods.md', difficulty: 'intermediate', topics: ['__str__', 'get_absolute_url', 'Custom Methods'] }
+                ]
+            },
+            {
+                id: 'orm-mastery',
+                folder: '04_ORM',
+                title: 'ORM Mastery',
+                description: 'Advanced Database Operations & QuerySets',
+                icon: 'database-zap',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/04_ORM',
+                files: [
+                    { name: '01_CRUD_Operations.md', difficulty: 'intermediate', topics: ['Create', 'Read', 'Update', 'Delete'] },
+                    { name: '02_QuerySet_Filtering.md', difficulty: 'intermediate', topics: ['filter', 'exclude', 'get'] },
+                    { name: '03_Advanced_ORM.md', difficulty: 'advanced', topics: ['Q Objects', 'F Expressions', 'Prefetch'] },
+                    { name: '04_Soft_Delete.md', difficulty: 'advanced', topics: ['Custom Manager', 'Logical Delete'] },
+                    { name: '05_Faker_Library.md', difficulty: 'intermediate', topics: ['Seeding Data', 'Testing'] },
+                    { name: '06_Aggregation_vs_Annotation.md', difficulty: 'advanced', topics: ['Sum', 'Count', 'Avg', 'Group By'] },
+                    { name: '07_Database_Optimization.md', difficulty: 'advanced', topics: ['select_related', 'prefetch_related'] }
+                ]
+            },
+
+            {
+                id: 'views',
+                folder: '05_Views',
+                title: 'Views & URL Routing',
+                description: 'Handling requests and routing',
+                icon: 'route',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/05_Views',
+                files: [
+                    { name: '01_Django_Views.md', difficulty: 'beginner', topics: ['Function Views', 'Class Views'] },
+                    { name: '02_HttpResponse_and_URLs.md', difficulty: 'beginner', topics: ['HttpResponse', 'URL Patterns'] },
+                    { name: '03_Advanced_URL_Techniques.md', difficulty: 'advanced', topics: ['URL Namespaces', 'Path Converters'] }
+                ]
+            },
+            {
+                id: 'templates',
+                folder: '06_Templates',
+                title: 'Templates & Frontend',
+                description: 'Django template engine and static files',
+                icon: 'layout',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/06_Templates',
+                files: [
+                    { name: '01_Template_Engine.md', difficulty: 'beginner', topics: ['Template Syntax', 'Context'] },
+                    { name: '02_Tags_and_Filters.md', difficulty: 'intermediate', topics: ['Built-in Tags', 'Filters'] },
+                    { name: '03_Template_Inheritance.md', difficulty: 'intermediate', topics: ['Base Templates', 'Blocks'] },
+                    { name: '04_Static_Files_and_Bootstrap.md', difficulty: 'beginner', topics: ['Static Files', 'CSS', 'JavaScript'] }
+                ]
+            },
+            {
+                id: 'forms',
+                folder: '07_Forms',
+                title: 'Forms & Validation',
+                description: 'User input handling and validation',
+                icon: 'file-edit',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/07_Forms',
+                files: [
+                    { name: '01_Forms_Basics.md', difficulty: 'beginner', topics: ['Form Class', 'Form Fields'] },
+                    { name: '01_Working_With_Forms.md', difficulty: 'beginner', topics: ['Form Rendering', 'Form Submission'] },
+                    { name: '02_ModelForms.md', difficulty: 'intermediate', topics: ['ModelForm', 'Form from Model'] },
+                    { name: '03_Handling_Form_Data.md', difficulty: 'intermediate', topics: ['POST Data', 'Cleaned Data'] },
+                    { name: '04_Form_Validation.md', difficulty: 'intermediate', topics: ['Validators', 'Clean Methods'] }
+                ]
+            },
+            {
+                id: 'admin',
+                folder: '08_Admin',
+                title: 'Admin Interface',
+                description: 'Django admin panel customization',
+                icon: 'shield',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/08_Admin',
+                files: [
+                    { name: '01_Admin_Customization.md', difficulty: 'intermediate', topics: ['Admin Classes', 'List Display'] },
+                    { name: '01_Admin_Interface.md', difficulty: 'beginner', topics: ['Admin Panel', 'Superuser'] },
+                    { name: '02_Admin_Customization.md', difficulty: 'intermediate', topics: ['Filters', 'Search'] },
+                    { name: '03_Admin_Security.md', difficulty: 'advanced', topics: ['Permissions', 'Admin Actions'] }
+                ]
+            },
+            {
+                id: 'authentication',
+                folder: '09_Authentication',
+                title: 'Authentication & Authorization',
+                description: 'User management and security',
+                icon: 'lock',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/09_Authentication',
+                files: [
+                    { name: '01_Auth_System.md', difficulty: 'intermediate', topics: ['Login', 'Logout', 'Sessions'] },
+                    { name: '02_Custom_User_Models.md', difficulty: 'advanced', topics: ['AbstractUser', 'Custom User'] }
+                ]
+            },
+            {
+                id: 'database',
+                folder: '10_Database',
+                title: 'Database Management',
+                description: 'Database optimization and connections',
+                icon: 'server',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/10_Database',
+                files: [
+                    { name: '01_Database_Optimization.md', difficulty: 'advanced', topics: ['Query Optimization', 'Indexes'] },
+                    { name: '02_Connecting_Databases.md', difficulty: 'intermediate', topics: ['PostgreSQL', 'MySQL'] }
+                ]
+            },
+            {
+                id: 'drf',
+                folder: '11_Django_REST_Framework',
+                title: 'Django REST Framework',
+                description: 'Building RESTful APIs',
+                icon: 'api',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/11_Django_REST_Framework',
+                files: [
+                    { name: '01_DRF_Mastery.md', difficulty: 'advanced', topics: ['Serializers', 'ViewSets', 'Routers'] },
+                    { name: '02_Basic_Authentication.md', difficulty: 'intermediate', topics: ['Token Auth', 'JWT'] }
+                ]
+            },
+            {
+                id: 'middleware',
+                folder: '12_Middleware',
+                title: 'Middleware',
+                description: 'Request/response processing',
+                icon: 'workflow',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/12_Middleware',
+                files: [
+                    { name: '01_Middleware.md', difficulty: 'advanced', topics: ['Middleware Basics'] },
+                    { name: '01_Middleware_Basics.md', difficulty: 'intermediate', topics: ['Middleware Stack'] },
+                    { name: '02_Custom_Middleware.md', difficulty: 'advanced', topics: ['Custom Middleware'] },
+                    { name: '03_Common_Use_Cases.md', difficulty: 'intermediate', topics: ['Security', 'Logging'] }
+                ]
+            },
+            {
+                id: 'signals',
+                folder: '13_Signals',
+                title: 'Django Signals',
+                description: 'Event-driven programming in Django',
+                icon: 'radio',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/13_Signals',
+                files: [
+                    { name: '01_Signals.md', difficulty: 'intermediate', topics: ['Signal Basics'] },
+                    { name: '01_Signals_Intro.md', difficulty: 'intermediate', topics: ['What are Signals'] },
+                    { name: '02_Built_in_Signals.md', difficulty: 'intermediate', topics: ['pre_save', 'post_save'] },
+                    { name: '03_Connecting_Receivers.md', difficulty: 'intermediate', topics: ['Receivers', 'Decorators'] },
+                    { name: '04_Sending_Signals.md', difficulty: 'advanced', topics: ['Custom Signals'] },
+                    { name: '05_Practical_Examples.md', difficulty: 'intermediate', topics: ['Real Examples'] }
+                ]
+            },
+            {
+                id: 'performance',
+                folder: '14_Performance',
+                title: 'Performance Optimization',
+                description: 'Profiling and optimization techniques',
+                icon: 'zap',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/14_Performance',
+                files: [
+                    { name: '01_Profiling_and_Benchmarking.md', difficulty: 'advanced', topics: ['Profiling Tools'] },
+                    { name: '02_Django_Debug_Toolbar.md', difficulty: 'intermediate', topics: ['Debug Toolbar'] }
+                ]
+            },
+            {
+                id: 'security',
+                folder: '14_Security',
+                title: 'Security Best Practices',
+                description: 'Securing Django applications',
+                icon: 'shield-check',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/14_Security',
+                files: [
+                    { name: '01_Security_Best_Practices.md', difficulty: 'advanced', topics: ['CSRF', 'XSS', 'SQL Injection'] }
+                ]
+            },
+            {
+                id: 'deployment-1',
+                folder: '15_Deployment',
+                title: 'Deployment Basics',
+                description: 'Deploying Django applications',
+                icon: 'upload-cloud',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/15_Deployment',
+                files: [
+                    { name: '01_Environment_Variables.md', difficulty: 'intermediate', topics: ['Environment Config'] },
+                    { name: '02_Nginx_Gunicorn_Deployment.md', difficulty: 'advanced', topics: ['Nginx', 'Gunicorn'] },
+                    { name: '03_Load_Balancing.md', difficulty: 'advanced', topics: ['Load Balancers', 'Scaling'] }
+                ]
+            },
+            {
+                id: 'testing',
+                folder: '15_Testing',
+                title: 'Testing Django Apps',
+                description: 'Unit and integration testing',
+                icon: 'test-tube',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/15_Testing',
+                files: [
+                    { name: '01_Testing_Django.md', difficulty: 'intermediate', topics: ['Unit Tests', 'Test Cases'] }
+                ]
+            },
+            {
+                id: 'deployment-2',
+                folder: '16_Deployment',
+                title: 'Advanced Deployment',
+                description: 'Production deployment strategies',
+                icon: 'cloud',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/16_Deployment',
+                files: [
+                    { name: '01_Production_Deployment.md', difficulty: 'advanced', topics: ['Production', 'CI/CD'] }
+                ]
+            },
+            {
+                id: 'performance-opt',
+                folder: '17_Performance_Optimization',
+                title: 'Performance Tuning',
+                description: 'Advanced performance optimization',
+                icon: 'gauge',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/17_Performance_Optimization',
+                files: [
+                    { name: '01_Performance_Tuning.md', difficulty: 'advanced', topics: ['Caching', 'Query Optimization'] }
+                ]
+            },
+            {
+                id: 'advanced-topics',
+                folder: '18_Advanced_Topics',
+                title: 'Advanced Topics',
+                description: 'Advanced Django concepts',
+                icon: 'brain',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/18_Advanced_Topics',
+                files: [
+                    { name: '01_Advanced_Django.md', difficulty: 'advanced', topics: ['Advanced Patterns'] },
+                    { name: '02_Logging_and_Monitoring.md', difficulty: 'advanced', topics: ['Logging', 'Monitoring'] },
+                    { name: '03_Internationalization.md', difficulty: 'intermediate', topics: ['i18n', 'l10n'] },
+                    { name: '04_Sitemaps_Feeds.md', difficulty: 'intermediate', topics: ['Sitemaps', 'RSS Feeds'] }
+                ]
+            },
+            {
+                id: 'real-projects',
+                folder: '19_Real_Projects',
+                title: 'Real-World Projects',
+                description: 'Build complete Django applications',
+                icon: 'code',
+                github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/19_Real_Projects',
+                files: [
+                    { name: '01_Blog_Setup_Models.md', difficulty: 'intermediate', topics: ['Blog Models', 'Setup'] },
+                    { name: '02_Blog_Views_Templates.md', difficulty: 'intermediate', topics: ['Blog Views', 'Templates'] }
+                ],
+                subfolders: [
+                    { name: '01_Expense_Tracker', github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/19_Real_Projects/01_Expense_Tracker' },
+                    { name: '02_Pinterest_Clone', github: 'https://github.com/Raviranjan010/Django_Learning/tree/main/19_Real_Projects/02_Pinterest_Clone' }
+                ]
+            }
+        ];
+
+        // State
+        let currentModule = null;
+        let currentView = localStorage.getItem('django_view') || 'grid';
+        let completedFiles = new Set(JSON.parse(localStorage.getItem('django_completed') || '[]'));
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderFileTree();
+            setView(currentView); // Set initial view
+            showAllModules();
+            updateProgress();
+        });
+
+        // Sidebar Functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function renderFileTree() {
+            const tree = document.getElementById('file-tree');
+            tree.innerHTML = repoStructure.map((module, index) => {
+                const fileCount = module.files.length + (module.subfolders ? module.subfolders.length : 0);
+                return `
+                    <div class="mb-1">
+                        <div class="folder-item ${index === 0 ? 'active' : ''}" onclick="loadModule('${module.id}')" data-module="${module.id}">
+                            <span class="folder-icon">
+                                <i data-lucide="${module.icon}" class="w-4 h-4"></i>
+                            </span>
+                            <div class="flex-1 flex items-center justify-between">
+                                <span class="truncate">${module.folder}</span>
+                                <span class="text-[10px] text-ink-600 ml-2">${fileCount}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function filterTree(query) {
+            const items = document.querySelectorAll('.folder-item');
+            const lowerQuery = query.toLowerCase();
+
+            items.forEach((item) => {
+                const moduleId = item.getAttribute('data-module');
+                const module = repoStructure.find(m => m.id === moduleId);
+                const match = module.folder.toLowerCase().includes(lowerQuery) ||
+                    module.title.toLowerCase().includes(lowerQuery);
+                item.closest('.mb-1').style.display = match ? 'block' : 'none';
+            });
+        }
+
+        // Module Loading
+        function loadModule(moduleId) {
+            currentModule = repoStructure.find(m => m.id === moduleId);
+            if (!currentModule) return;
+
+            // Update breadcrumb
+            document.getElementById('breadcrumb-path').textContent = currentModule.folder;
+
+            // Update header
+            document.getElementById('module-title').textContent = currentModule.title;
+            document.getElementById('module-description').textContent = currentModule.description;
+            document.getElementById('module-number').textContent = `Module ${String(repoStructure.indexOf(currentModule) + 1).padStart(2, '0')} / ${repoStructure.length}`;
+
+            // Update icon
+            const iconEl = document.getElementById('module-icon');
+            iconEl.innerHTML = `<i data-lucide="${currentModule.icon}" class="w-8 h-8 text-white"></i>`;
+
+            // Update GitHub link
+            const githubLink = document.getElementById('module-github-link');
+            githubLink.href = currentModule.github;
+            githubLink.style.display = 'inline-flex';
+
+            // Render files
+            renderFiles(currentModule.files, currentModule.subfolders);
+
+            // Update sidebar active state
+            document.querySelectorAll('.folder-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-module') === moduleId) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Close mobile sidebar
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            lucide.createIcons();
+        }
+
+        function showAllModules() {
+            currentModule = null;
+            document.getElementById('breadcrumb-path').textContent = 'all modules';
+            document.getElementById('module-title').textContent = 'Django Learning Modules';
+            document.getElementById('module-description').textContent = 'Explore the complete Django learning path. Select any module to dive deep into specific topics.';
+            document.getElementById('module-number').textContent = `${repoStructure.length} Total Modules`;
+            document.getElementById('module-github-link').style.display = 'none';
+
+            const iconEl = document.getElementById('module-icon');
+            iconEl.innerHTML = `<i data-lucide="folder-open" class="w-8 h-8 text-white"></i>`;
+
+            // Render all modules as cards
+            const allFiles = repoStructure.flatMap(module =>
+                module.files.map(file => ({ ...file, module: module.title, moduleIcon: module.icon, github: `${module.github}` }))
+            );
+
+            renderFiles(allFiles);
+
+            document.querySelectorAll('.folder-item').forEach(item => item.classList.remove('active'));
+
+            lucide.createIcons();
+        }
+
+        function renderFiles(files, subfolders = []) {
+            const grid = document.getElementById('content-grid');
+            const emptyState = document.getElementById('empty-state');
+
+            if (files.length === 0 && subfolders.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            // Render files
+            const fileCards = files.map((file, idx) => {
+                const fileId = `${currentModule?.id || 'all'}-${idx}`;
+                const isCompleted = completedFiles.has(fileId);
+                const difficultyClass = `difficulty-${file.difficulty}`;
+
+                const isList = currentView === 'list';
+
+                return `
+                    <div class="article-card fade-in stagger-${(idx % 6) + 1}" onclick="toggleComplete('${fileId}')" 
+                        style="${isList ? 'display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem;' : ''}">
+                        
+                        ${isCompleted ? `<div class="${isList ? 'order-last ml-auto' : 'absolute top-4 right-4'}"><i data-lucide="check-circle" class="w-5 h-5 text-django-mint"></i></div>` : ''}
+                        
+                        <div class="${isList ? 'shrink-0' : 'flex items-start justify-between mb-4'}">
+                            <span class="difficulty-badge ${difficultyClass}">
+                                <i data-lucide="signal" class="w-3 h-3"></i>
+                                ${file.difficulty}
+                            </span>
+                            ${!isList && file.module ? `<span class="text-[10px] font-mono text-ink-600">${file.module}</span>` : ''}
+                        </div>
+
+                        <div class="${isList ? 'flex-1 min-w-0' : ''}">
+                             <h3 class="font-serif text-xl font-bold text-ink-50 ${isList ? 'mb-1' : 'mb-3'} ${isCompleted ? 'line-through opacity-60' : ''}">
+                                ${file.name.replace('.md', '')}
+                            </h3>
+                            
+                            ${isList && file.module ? `<p class="text-[10px] font-mono text-ink-600 mb-2">${file.module}</p>` : ''}
+
+                            ${file.topics ? `
+                                <div class="flex flex-wrap gap-2 ${isList ? '' : 'mb-4'}">
+                                    ${file.topics.slice(0, 3).map(topic => `
+                                        <span class="px-2 py-1 bg-ink-800/50 text-ink-400 text-[10px] font-mono rounded border border-ink-700">
+                                            ${topic}
+                                        </span>
+                                    `).join('')}
+                                    ${file.topics.length > 3 ? `<span class="px-2 py-1 text-ink-600 text-[10px] font-mono">+${file.topics.length - 3}</span>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="${isList ? 'flex items-center gap-4 shrink-0' : 'mt-4 pt-4 border-t border-ink-800 flex items-center justify-between'}">
+                            <a href="${currentModule?.github || file.github}" target="_blank" class="text-xs font-mono text-django-emerald hover:text-django-mint transition-colors flex items-center gap-1" onclick="event.stopPropagation()">
+                                <i data-lucide="external-link" class="w-3 h-3"></i>
+                                <span class="${isList ? 'hidden md:inline' : ''}">View File</span>
+                            </a>
+                            <button class="text-xs font-mono ${isCompleted ? 'text-django-mint' : 'text-ink-500'} flex items-center gap-1">
+                                ${isCompleted ? 'Completed' : 'Mark Done'}
+                                <i data-lucide="${isCompleted ? 'check' : 'circle'}" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render subfolders
+            const subfolderCards = subfolders.map((subfolder, idx) => `
+                <div class="article-card fade-in stagger-${((files.length + idx) % 6) + 1}">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="difficulty-badge difficulty-intermediate">
+                            <i data-lucide="folder" class="w-3 h-3"></i>
+                            Project
+                        </span>
+                    </div>
+
+                    <h3 class="font-serif text-xl font-bold text-ink-50 mb-3">
+                        ${subfolder.name}
+                    </h3>
+
+                    <p class="text-ink-500 text-sm mb-4">Complete project implementation</p>
+
+                    <div class="mt-4 pt-4 border-t border-ink-800 flex items-center justify-between">
+                        <a href="${subfolder.github}" target="_blank" class="text-xs font-mono text-django-emerald hover:text-django-mint transition-colors flex items-center gap-1">
+                            <i data-lucide="external-link" class="w-3 h-3"></i>
+                            View Project
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+
+            grid.innerHTML = fileCards + subfolderCards;
+            lucide.createIcons();
+        }
+
+        function toggleComplete(fileId) {
+            if (completedFiles.has(fileId)) {
+                completedFiles.delete(fileId);
+                showToast('File marked as incomplete');
+            } else {
+                completedFiles.add(fileId);
+                showToast('File completed!');
+            }
+            localStorage.setItem('django_completed', JSON.stringify([...completedFiles]));
+            updateProgress();
+
+            if (currentModule) {
+                renderFiles(currentModule.files, currentModule.subfolders);
+            } else {
+                showAllModules();
+            }
+        }
+
+        function updateProgress() {
+            const totalFiles = repoStructure.reduce((sum, m) => sum + m.files.length, 0);
+            const completed = completedFiles.size;
+            const percent = totalFiles > 0 ? Math.round((completed / totalFiles) * 100) : 0;
+
+            // Update progress ring
+            const circumference = 2 * Math.PI * 16;
+            const offset = circumference - (percent / 100) * circumference;
+            document.getElementById('progress-circle').style.strokeDashoffset = offset;
+            document.getElementById('progress-text').textContent = `${percent}%`;
+            document.getElementById('progress-count').textContent = `${completed}/${totalFiles}`;
+        }
+
+        function handleSearch(query) {
+            if (!query) {
+                if (currentModule) {
+                    renderFiles(currentModule.files, currentModule.subfolders);
+                } else {
+                    showAllModules();
+                }
+                return;
+            }
+
+            const lower = query.toLowerCase();
+
+            if (currentModule) {
+                const filtered = currentModule.files.filter(f =>
+                    f.name.toLowerCase().includes(lower) ||
+                    (f.topics && f.topics.some(t => t.toLowerCase().includes(lower)))
+                );
+                renderFiles(filtered, currentModule.subfolders);
+            } else {
+                const allFiles = repoStructure.flatMap(module =>
+                    module.files
+                        .filter(f =>
+                            f.name.toLowerCase().includes(lower) ||
+                            (f.topics && f.topics.some(t => t.toLowerCase().includes(lower))) ||
+                            module.title.toLowerCase().includes(lower)
+                        )
+                        .map(file => ({ ...file, module: module.title, moduleIcon: module.icon, github: module.github }))
+                );
+                renderFiles(allFiles);
+            }
+        }
+
+        function setView(view) {
+            currentView = view;
+            localStorage.setItem('django_view', view);
+
+            const grid = document.getElementById('content-grid');
+            if (grid) {
+                if (view === 'list') {
+                    grid.classList.remove('md:grid-cols-2', 'lg:grid-cols-3');
+                    grid.classList.add('grid-cols-1');
+                } else {
+                    grid.classList.add('md:grid-cols-2', 'lg:grid-cols-3');
+                    grid.classList.remove('grid-cols-1');
+                }
+            }
+
+            document.getElementById('view-grid').classList.toggle('text-django-mint', view === 'grid');
+            document.getElementById('view-list').classList.toggle('text-django-mint', view === 'list');
+
+            // Re-render to update card styles
+            if (currentModule) {
+                renderFiles(currentModule.files, currentModule.subfolders);
+            } else {
+                handleSearch(document.getElementById('search-input')?.value || '');
+            }
+        }
+
+        function resetView() {
+            showAllModules();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+
+            toast.classList.remove('translate-y-32', 'opacity-0');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('search-input').focus();
+            }
+        });
+    </script>
 </body>
 
 </html>
