@@ -353,11 +353,11 @@
     </style>
 </head>
 
-<body class="bg-ink-950 text-ink-100 font-sans antialiased overflow-hidden h-screen paper-texture">
+<body class="bg-ink-950 text-ink-100 font-sans antialiased overflow-hidden h-[100dvh] paper-texture">
 
     <!-- Header -->
     <header class="relative z-50 h-16 border-b border-ink-800/50 backdrop-blur-xl bg-ink-950/80">
-        <div class="h-full max-w-[1800px] mx-auto px-6 flex items-center justify-between">
+        <div class="h-full max-w-[1800px] mx-auto px-4 md:px-6 flex items-center justify-between">
 
             <!-- Logo & Title -->
             <div class="flex items-center gap-4">
@@ -440,7 +440,7 @@
 
         <!-- Sidebar - File Tree -->
         <aside id="sidebar"
-            class="w-80 bg-ink-900/50 border-r border-ink-800/50 flex flex-col absolute lg:static h-full transition-transform duration-300 -translate-x-full lg:translate-x-0 z-40 backdrop-blur-xl">
+            class="w-72 lg:w-80 bg-ink-900/50 border-r border-ink-800/50 flex flex-col absolute lg:static h-full transition-transform duration-300 -translate-x-full lg:translate-x-0 z-40 backdrop-blur-xl">
 
             <!-- Sidebar Header -->
             <div class="p-5 border-b border-ink-800/50">
@@ -511,12 +511,12 @@
             </div>
 
             <!-- Scrollable Content -->
-            <div id="main-content" class="flex-1 overflow-y-auto p-8 scroll-smooth">
+            <div id="main-content" class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
                 <div class="max-w-[1400px] mx-auto">
 
                     <!-- Module Header -->
                     <div id="module-header" class="mb-12">
-                        <div class="flex items-start gap-6">
+                        <div class="flex flex-col md:flex-row items-start gap-4 md:gap-6">
                             <div id="module-icon"
                                 class="shrink-0 w-16 h-16 bg-gradient-to-br from-django-green to-django-emerald rounded-xl flex items-center justify-center shadow-lg">
                                 <i data-lucide="folder-open" class="w-8 h-8 text-white"></i>
@@ -527,7 +527,8 @@
                                         class="px-3 py-1 bg-ink-900 border border-ink-700 text-[11px] font-mono text-ink-400 rounded uppercase tracking-wide">Module</span>
                                     <span id="module-number" class="text-xs font-mono text-django-emerald">--</span>
                                 </div>
-                                <h1 id="module-title" class="font-serif text-4xl font-black text-ink-50 mb-3">
+                                <h1 id="module-title"
+                                    class="font-serif text-3xl md:text-4xl font-black text-ink-50 mb-3">
                                     Select a Module
                                 </h1>
                                 <p id="module-description" class="text-ink-400 text-lg leading-relaxed max-w-3xl">
